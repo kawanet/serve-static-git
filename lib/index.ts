@@ -35,7 +35,7 @@ export function serveStaticGit(options: SSG.Options): SSG.RequestHandler<http.Se
         const hasDot = path.split("/").filter(v => /^\./.test(v)).length
         if (hasDot) {
             if (dotfiles === "deny") {
-                res.writeHead(403)
+                res.statusCode = 403
                 res.end()
                 return
             } else if (dotfiles === "ignore") {
@@ -53,7 +53,7 @@ export function serveStaticGit(options: SSG.Options): SSG.RequestHandler<http.Se
 
         if (etag) res.setHeader("ETag", `W/${file.oid}`)
 
-        res.writeHead(200)
+        res.statusCode = 200
         res.end(file.data)
     }
 }
