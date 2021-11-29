@@ -31,6 +31,8 @@ describe(TITLE, () => {
         await request.get("/bar/bar.css").then(res => assert.equal(res.status, 200))
         await request.get("/bar/buz/buz.js").then(res => assert.equal(res.status, 200))
         await request.get(`/not-found.html`).then(res => assert.equal(res.status, 404))
+
+        await request.get("/foo.html?_=1638157880").then(res => assert.match(String(res.data), /Foo/))
     })
 
     it(`createServer`, async () => {
@@ -47,6 +49,8 @@ describe(TITLE, () => {
         await request.get("/bar/bar.css").then(res => assert.equal(res.status, 200))
         await request.get("/bar/buz/buz.js").then(res => assert.equal(res.status, 200))
         await request.get(`/bar/not-found.html`).then(res => assert.equal(res.status, 404))
+
+        await request.get("/foo.html?_=1638157880").then(res => assert.match(String(res.data), /Foo/))
     })
 
     it(`finalhandler`, async () => {
@@ -62,5 +66,7 @@ describe(TITLE, () => {
         await request.get("/bar/bar.css").then(res => assert.equal(res.status, 200))
         await request.get("/bar/buz/buz.js").then(res => assert.equal(res.status, 200))
         await request.get(`/bar/buz/not-found.html`).then(res => assert.equal(res.status, 404))
+
+        await request.get("/foo.html?_=1638157880").then(res => assert.match(String(res.data), /Foo/))
     })
 })
