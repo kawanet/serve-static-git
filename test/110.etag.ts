@@ -37,7 +37,7 @@ describe(TITLE, () => {
         assert.strictEqual(res.status, 200)
         assert.match(String(res.data), /Bar/)
         assert.match(res.headers["content-type"], /^text\/css/)
-        assert.match(res.headers.etag, /^W\//)
+        assert.match(res.headers.etag, /^W\/[0-9a-fA-F]{40,}$/)
     })
 
     it(`etag: undefined`, async () => {
@@ -46,6 +46,6 @@ describe(TITLE, () => {
         assert.strictEqual(res.status, 200)
         assert.match(String(res.data), /Buz/)
         assert.match(res.headers["content-type"], /^application\/javascript/)
-        assert.match(res.headers.etag, /^W\//)
+        assert.match(res.headers.etag, /^W\/[0-9a-fA-F]{40,}$/)
     })
 })
