@@ -61,6 +61,15 @@ export function serveStaticGit(options: SSG.Options): SSG.RequestHandler<http.Se
         if (!entry) return next()
 
         if (entry.mode.isDirectory) {
+            if (!/\/$/.test(path)) {
+                res.statusCode = 301
+                let url = (req as any).originalUrl || req.url
+                url = url!.replace(/(#|\?|$)/, "/$1")
+                res.setHeader("Location", url)
+                res.end()
+                return
+            }
+
             const indexList = Array.isArray(options.index) ? options.index : options.index ? [options.index] : ["index.html"];
             for (const index of indexList) {
                 const indexPath = path.replace(/\/*$/, `/${index}`)
