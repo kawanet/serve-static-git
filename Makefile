@@ -20,6 +20,6 @@ mocha: test/100.serve.js ./node_modules/.bin/mocha repo/bare1.git
 	./node_modules/.bin/mocha test
 
 repo/bare1.git:
-	test/test-prepare.sh
+	sh ./test/test-prepare.sh
 
 .PHONY: all clean test
