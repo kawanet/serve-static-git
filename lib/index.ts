@@ -53,7 +53,26 @@ export function serveStaticGit(options: SSG.Options): SSG.RequestHandler<http.Se
         }
 
         if (root) path = root + path
-        const file = await commit.getFile(path).catch(_ => undefined)
+
+        const tree = await commit.getTree()
+        if (!tree) return next()
+
+        const entry = await tree.getEntry(path)
+        if (!entry) return next()
+
+        if (entry.mode.isDirectory) {
+            const indexList = Array.isArray(options.index) ? options.index : options.index ? [options.index] : ["index.html"];
+            for (const index of indexList) {
+                const indexPath = path.replace(/\/*$/, `/${index}`)
+                const entry = await tree.getEntry(indexPath)
+                if (entry) {
+                    path = indexPath
+                    break;
+                }
+            }
+        }
+
+        const file = await commit.getFile(path)
         if (!file) return next()
 
         const type = mime.lookup(path)

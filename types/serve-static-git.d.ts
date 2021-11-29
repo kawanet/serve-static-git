@@ -42,6 +42,13 @@ export declare namespace SSG {
          * @default `true`
          */
         etag?: boolean;
+
+        /**
+         * index file name(s) for directory URL with trailing `/`
+         *
+         * @default `index.html`
+         */
+        index?: string | string[];
     }
 
     interface RequestHandler<R extends http.ServerResponse> {
