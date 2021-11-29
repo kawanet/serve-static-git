@@ -2,8 +2,8 @@
  * https://github.com/kawanet/serve-static-git
  */
 
-import {openLocalRepo} from "git-cat-file"
-import * as http from "http"
+import {openLocalRepo, GCF} from "git-cat-file"
+import type * as http from "http"
 import * as mime from "mime"
 
 import type {SSG} from ".."
@@ -23,15 +23,19 @@ export function serveStaticGit(options: SSG.Options): SSG.RequestHandler<http.Se
 
     return async (req, res, next) => {
         const host = String(req.headers.host)
-        const isIP = /^\d+\.\d+\.\d+\.\d+(:|$)/.test(host)
-        const rev = !isIP && host.split(/[.:]/).shift()!
+        let commit: GCF.Commit;
 
-        let commit = await repo.getCommit(rev || "HEAD").catch(_ => undefined)
-        if (rev && !commit) {
-            commit = await repo.getCommit("HEAD").catch(_ => undefined)
+        if (options.refs) {
+            const rev = options.refs(req)
+            if (rev) commit = await repo.getCommit(rev)
+        } else {
+            const isIP = /^\d+\.\d+\.\d+\.\d+(:|$)/.test(host)
+            const rev = !isIP && host.split(/[.:]/).shift()!
+            if (rev) commit = await repo.getCommit(rev)
+            if (!commit!) commit = await repo.getCommit("HEAD")
         }
 
-        if (!commit) return next()
+        if (!commit!) return next()
 
         const url = new URL(String(req.url), `http://${host}`)
         let path = url.pathname.replace(/^\/+/, "").replace(/\?.*$/, "")
