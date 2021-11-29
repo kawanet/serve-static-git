@@ -11,7 +11,7 @@ const TITLE = __filename.split("/").pop()!
 
 describe(TITLE, () => {
 
-    ["repo/loose1", "repo/packed1", "repo/bare1.git"].forEach(test)
+    ["repo/loose1/.git", "repo/packed1/.git", "repo/bare1.git"].forEach(test)
 
     function test(repo: string) {
         it(`repo: "${repo}"`, async () => {

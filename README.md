@@ -16,7 +16,7 @@ const {serveStaticGit} = require("serve-static-git");
 const app = express();
 
 app.use(serveStaticGit({
-  repo: "path/to/repository",
+  repo: "path/to/repository/.git",
   root: "htdocs",
 }));
 

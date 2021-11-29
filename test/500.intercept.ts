@@ -19,7 +19,7 @@ describe(TITLE, () => {
     app.use(responseHandler().replaceString(body => body.toLowerCase()))
 
     app.use(serveStaticGit({
-        repo: `${BASE}/repo/loose1`,
+        repo: `${BASE}/repo/loose1/.git`,
         root: `htdocs`,
         dotfiles: "deny",
     }))

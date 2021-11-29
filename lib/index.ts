@@ -9,6 +9,10 @@ import * as mime from "mime"
 import type {SSG} from ".."
 
 export function serveStaticGit(options: SSG.Options): SSG.RequestHandler<http.ServerResponse> {
+    if (!/\.git$/.test(options.repo)) {
+        throw new TypeError(`Invalid repository path: ${options.repo}`)
+    }
+
     const repo = openLocalRepo(options.repo)
 
     let root = options.root

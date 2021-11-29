@@ -12,7 +12,7 @@ const TITLE = __filename.split("/").pop()!
 describe(TITLE, () => {
     const makeRequest = (options: Pick<SSG.Options, "dotfiles">) => {
         const serve = serveStaticGit({
-            repo: `${BASE}/repo/loose1`,
+            repo: `${BASE}/repo/loose1/.git`,
             root: `htdocs`,
             dotfiles: options.dotfiles,
         })
