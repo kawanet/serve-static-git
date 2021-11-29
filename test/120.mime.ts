@@ -6,9 +6,6 @@ import * as finalhandler from "finalhandler";
 
 import {serveStaticGit} from "..";
 
-const assert_match: typeof assert.match = (value, regexp) => assert.ok(regexp.test(value), `"${value}" should match ${regexp}`)
-if (!assert.match) assert.match = assert_match;
-
 const BASE = __dirname.replace(/\/[^/]+\/?$/, "")
 const TITLE = __filename.split("/").pop()!
 

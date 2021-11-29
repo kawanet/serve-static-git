@@ -47,6 +47,7 @@ server.listen(3000)
 - https://github.com/kawanet/serve-static-git
 - https://www.npmjs.com/package/git-cat-file
 - https://www.npmjs.com/package/serve-static-git
+- https://www.npmjs.com/package/weboverlay
 
 ### LICENSE
 

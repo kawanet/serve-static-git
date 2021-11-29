@@ -16,6 +16,7 @@ mkdir -p htdocs/bar/buz
 echo "<!-- Foo -->" > htdocs/foo.html
 echo "/* Bar */" > htdocs/bar/bar.css
 echo "// Buz" > htdocs/bar/buz/buz.js
+echo "<!-- Index -->" > htdocs/bar/buz/index.html
 echo "# htaccess" > htdocs/.htaccess
 git add htdocs
 git commit -m 'main branch'
@@ -25,6 +26,7 @@ echo "<!-- FOO -->" > htdocs/foo.html
 echo "/* BAR */" > htdocs/bar/bar.css
 echo "// BUZ" > htdocs/bar/buz/buz.js
 echo "# HTACCESS" > htdocs/.htaccess
+echo "<!-- INDEX -->" > htdocs/bar/buz/index.html
 git add htdocs
 git commit -m 'upper branch'
 git switch main
