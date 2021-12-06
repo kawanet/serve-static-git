@@ -37,7 +37,8 @@ export declare namespace SSG {
         dotfiles?: "allow" | "deny" | "ignore";
 
         /**
-         * - `true` to set `ETag: W/` header with SHA-1 object ID
+         * - `true` to respond `ETag: W/` header with SHA-1 object ID
+         * - `false` not to add `ETag:` header
          *
          * @default `true`
          */
@@ -49,6 +50,14 @@ export declare namespace SSG {
          * @default `index.html`
          */
         index?: string | string[];
+
+        /**
+         * - `true` to respond `X-Commit:` header with SHA-1 commit ID
+         * - `false` not to add `X-Commit:` header
+         *
+         * @default `true`
+         */
+        commit?: boolean;
     }
 
     interface RequestHandler<R extends http.ServerResponse> {
