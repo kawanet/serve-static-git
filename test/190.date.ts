@@ -8,50 +8,52 @@ import {serveStaticGit, SSG} from "..";
 
 const BASE = __dirname.replace(/\/[^/]+\/?$/, "")
 const TITLE = __filename.split("/").pop()!
+const VALID_DATE = /^\w{3}, \d{2} \w{3} \d{4} \d{2}:\d{2}:\d{2} GMT/;
 
 describe(TITLE, () => {
-    const makeRequest = (options: Pick<SSG.Options, "commit">) => {
+    const makeRequest = (options: Pick<SSG.Options, "lastModified">) => {
         const serve = serveStaticGit({
             repo: `${BASE}/repo/loose1/.git`,
             root: `htdocs`,
-            commit: options.commit,
+            lastModified: options.lastModified,
         })
 
         return axiosist((req, res) => serve(req, res, finalhandler(req, res)))
     };
 
-    it(`commit: false`, async () => {
-        const request = makeRequest({commit: false})
+    it(`lastModified: false`, async () => {
+        const request = makeRequest({lastModified: false})
         const res = await request.get(`/foo.html`)
         assert.strictEqual(res.status, 200)
         assert.match(String(res.data), /Foo/)
-        assert.equal(res.headers["x-commit"], undefined, "should NOT have an X-Commit:")
+        assert.match(res.headers["date"], VALID_DATE)
+        assert.equal(res.headers["last-modified"], undefined, "should NOT have an Last-Modified:")
     })
 
-    it(`commit: true`, async () => {
-        const request = makeRequest({commit: true})
+    it(`lastModified: true`, async () => {
+        const request = makeRequest({lastModified: true})
         const res = await request.get(`/bar/bar.css`)
         assert.strictEqual(res.status, 200)
         assert.match(String(res.data), /Bar/)
-        assert.match(res.headers["content-type"], /^text\/css/)
-        assert.match(res.headers["x-commit"], /^[0-9a-fA-F]{40,}$/)
+        assert.match(res.headers["date"], VALID_DATE)
+        assert.match(res.headers["last-modified"], VALID_DATE)
     })
 
-    it(`commit: undefined`, async () => {
+    it(`lastModified: undefined`, async () => {
         const request = makeRequest({})
         const res = await request.get(`/bar/buz/buz.js`)
         assert.strictEqual(res.status, 200)
         assert.match(String(res.data), /Buz/)
-        assert.match(res.headers["content-type"], /^application\/javascript/)
-        assert.match(res.headers["x-commit"], /^[0-9a-fA-F]{40,}$/)
+        assert.match(res.headers["date"], VALID_DATE)
+        assert.match(res.headers["last-modified"], VALID_DATE)
     })
 
-    it(`commit: "X-Commit-Id"`, async () => {
-        const request = makeRequest({commit: "X-Commit-Id"})
+    it(`lastModified: "X-Commit-Date"`, async () => {
+        const request = makeRequest({lastModified: "X-Commit-Date"})
         const res = await request.get(`/bar/buz/`)
         assert.strictEqual(res.status, 200)
         assert.match(String(res.data), /Index/)
-        assert.match(res.headers["content-type"], /^text\/html/)
-        assert.match(res.headers["x-commit-id"], /^[0-9a-fA-F]{40,}$/)
+        assert.match(res.headers["date"], VALID_DATE)
+        assert.match(res.headers["x-commit-date"], VALID_DATE)
     })
 })
