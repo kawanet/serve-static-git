@@ -19,7 +19,7 @@ export function serveStaticGit(options: SSG.Options): SSG.RequestHandler<http.Se
     if (root) root = root.replace(/\/?$/, "/")
 
     const etag = (options.etag !== false)
-    const commitOpt = (options.commit !== false)
+    const commitOpt = (options.commit == null) || options.commit;
     const dotfiles = options.dotfiles || "ignore"
 
     return async (req, res, next) => {
@@ -85,7 +85,10 @@ export function serveStaticGit(options: SSG.Options): SSG.RequestHandler<http.Se
         const file = await commit.getFile(path)
         if (!file) return next()
 
-        if (commitOpt) res.setHeader("X-Commit", commit.getId())
+        if (commitOpt) {
+            const commitKey = (commitOpt !== true) && commitOpt || "X-Commit";
+            res.setHeader(commitKey, commit.getId())
+        }
 
         const type = mime.lookup(path)
         if (type) res.setHeader("Content-Type", type)

@@ -54,10 +54,11 @@ export declare namespace SSG {
         /**
          * - `true` to respond `X-Commit:` header with SHA-1 commit ID
          * - `false` not to add `X-Commit:` header
+         * - set any string to specify header label
          *
-         * @default `true`
+         * @default `X-Commit`
          */
-        commit?: boolean;
+        commit?: string | boolean;
     }
 
     interface RequestHandler<R extends http.ServerResponse> {

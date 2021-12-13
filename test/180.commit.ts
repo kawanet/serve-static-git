@@ -45,4 +45,13 @@ describe(TITLE, () => {
         assert.match(res.headers["content-type"], /^application\/javascript/)
         assert.match(res.headers["x-commit"], /^[0-9a-fA-F]{40,}$/)
     })
+
+    it(`commit: "X-Commit-Id"`, async () => {
+        const request = makeRequest({commit: "X-Commit-Id"})
+        const res = await request.get(`/bar/buz/`)
+        assert.strictEqual(res.status, 200)
+        assert.match(String(res.data), /Index/)
+        assert.match(res.headers["content-type"], /^text\/html/)
+        assert.match(res.headers["x-commit-id"], /^[0-9a-fA-F]{40,}$/)
+    })
 })
