@@ -7,7 +7,7 @@
     "url": "https://github.com/kawanet/serve-static-git/issues"
   },
   "dependencies": {
-    "git-cat-file": "^0.1.2",
+    "git-cat-file": "^0.2.0",
     "mime": "^1.6.0"
   },
   "devDependencies": {

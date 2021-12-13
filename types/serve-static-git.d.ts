@@ -59,6 +59,15 @@ export declare namespace SSG {
          * @default `X-Commit`
          */
         commit?: string | boolean;
+
+        /**
+         * - `true` to respond `Last-Modified:` header with commit date
+         * - `false` not to add `Last-Modified:` header
+         * - set any string to specify header label
+         *
+         * @default `Last-Modified`
+         */
+        lastModified?: string | boolean;
     }
 
     interface RequestHandler<R extends http.ServerResponse> {
