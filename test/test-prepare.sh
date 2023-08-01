@@ -20,6 +20,7 @@ echo "<!-- Index -->" > htdocs/bar/buz/index.html
 echo "# htaccess" > htdocs/.htaccess
 git add htdocs
 git commit -m 'main branch'
+git tag -a main-tag -m 'main tag'
 
 git switch -c upper
 echo "<!-- FOO -->" > htdocs/foo.html
@@ -29,6 +30,8 @@ echo "# HTACCESS" > htdocs/.htaccess
 echo "<!-- INDEX -->" > htdocs/bar/buz/index.html
 git add htdocs
 git commit -m 'upper branch'
+git tag -a upper-tag -m 'upper tag'
+
 git switch main
 
 echo "==== packed1 ===="
