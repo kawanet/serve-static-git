@@ -23,6 +23,8 @@ describe(TITLE, () => {
 
         await request.get("/foo.html?refs=main").then(res => assert.match(String(res.data), /Foo/))
         await request.get("/foo.html?refs=upper").then(res => assert.match(String(res.data), /FOO/))
+        await request.get("/foo.html?refs=main-tag").then(res => assert.match(String(res.data), /Foo/))
+        await request.get("/foo.html?refs=upper-tag").then(res => assert.match(String(res.data), /FOO/))
         await request.get("/foo.html").then(res => assert.equal(res.status, 404))
     })
 
@@ -38,6 +40,8 @@ describe(TITLE, () => {
 
         await request.get("/foo.html", {headers: {"X-Refs": "main"}}).then(res => assert.match(String(res.data), /Foo/))
         await request.get("/foo.html", {headers: {"X-Refs": "upper"}}).then(res => assert.match(String(res.data), /FOO/))
+        await request.get("/foo.html", {headers: {"X-Refs": "main-tag"}}).then(res => assert.match(String(res.data), /Foo/))
+        await request.get("/foo.html", {headers: {"X-Refs": "upper-tag"}}).then(res => assert.match(String(res.data), /FOO/))
         await request.get("/foo.html").then(res => assert.equal(res.status, 404))
     })
 })
