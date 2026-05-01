@@ -2,7 +2,7 @@ import {strict as assert} from "node:assert";
 import {describe, it} from "node:test";
 import {fileURLToPath} from "node:url";
 import axiosist from "axiosist";
-import express from "express";
+import express from "express4";
 import finalhandler from "finalhandler";
 import * as http from "node:http";
 
