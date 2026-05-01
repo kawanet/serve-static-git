@@ -1,7 +1,7 @@
 {
   "name": "serve-static-git",
   "description": "Express middleware to serve static files directly from a `.git` repository.",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "author": "@kawanet",
   "bugs": {
     "url": "https://github.com/kawanet/serve-static-git/issues"
