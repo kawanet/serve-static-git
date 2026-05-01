@@ -1,6 +1,6 @@
 {
   "name": "serve-static-git",
-  "description": "Express middleware to serve static files directly from `.git` repository",
+  "description": "Express middleware to serve static files directly from a `.git` repository.",
   "version": "0.1.4",
   "author": "@kawanet",
   "bugs": {

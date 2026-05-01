@@ -9,61 +9,73 @@ export const serveStaticGit: (options: SSG.Options) => SSG.RequestHandler;
 export declare namespace SSG {
     interface Options {
         /**
-         * path to git repository to mount
-         * "path/to/bare/repository.git"
-         * "path/to/working/repository/.git"
+         * Path to the git repository to mount.
+         *
+         * @example "path/to/bare/repository.git"
+         * @example "path/to/working/repository/.git"
          */
         repo: string;
 
         /**
-         * document root path within the repository
+         * Document root within the repository.
          */
         root?: string;
 
         /**
-         * function to determine branch, tag or commit id
+         * Resolves the branch, tag, or commit id from the incoming request.
          *
          * @default `req => req.headers.host.split(/[.:]/).shift()`
          */
         refs?: <R extends http.IncomingMessage>(req: R) => string;
 
         /**
-         * - `allow` to serving dot files.
-         * - `deny` to return 403 error.
-         * - `ignore` to ignore and call `next()`.
+         * How to handle requests for dot-files (paths whose final segment
+         * starts with `.`):
+         *
+         * - `allow`: serve the file as usual.
+         * - `deny`: respond with 403.
+         * - `ignore`: skip handling and call `next()`.
          *
          * @default `ignore`
          */
         dotfiles?: "allow" | "deny" | "ignore";
 
         /**
-         * - `true` to respond `ETag: W/` header with SHA-1 object ID
-         * - `false` not to add `ETag:` header
+         * Whether to send an `ETag` header derived from the SHA-1 object id.
+         *
+         * - `true`: respond with a weak `ETag: W/...` header.
+         * - `false`: omit the `ETag` header.
          *
          * @default `true`
          */
         etag?: boolean;
 
         /**
-         * index file name(s) for directory URL with trailing `/`
+         * File name(s) to serve for a directory URL ending in `/`.
          *
          * @default `index.html`
          */
         index?: string | string[];
 
         /**
-         * - `true` to respond `X-Commit:` header with SHA-1 commit ID
-         * - `false` not to add `X-Commit:` header
-         * - set any string to specify header label
+         * Whether (and under which name) to send a header carrying the
+         * SHA-1 commit id.
+         *
+         * - `true`: send `X-Commit: <sha>`.
+         * - `false`: omit the header.
+         * - any string: use that string as the header name.
          *
          * @default `X-Commit`
          */
         commit?: string | boolean;
 
         /**
-         * - `true` to respond `Last-Modified:` header with commit date
-         * - `false` not to add `Last-Modified:` header
-         * - set any string to specify header label
+         * Whether (and under which name) to send a header carrying the
+         * commit date.
+         *
+         * - `true`: send `Last-Modified: <date>`.
+         * - `false`: omit the header.
+         * - any string: use that string as the header name.
          *
          * @default `Last-Modified`
          */
