@@ -1,7 +1,7 @@
 import {strict as assert} from "node:assert";
 import {describe, it} from "node:test";
 import {fileURLToPath} from "node:url";
-import axiosist from "axiosist";
+import supertest from "supertest";
 import express from "express4";
 
 import {serveStaticGit} from "../lib/index.ts";
@@ -21,12 +21,12 @@ describe(TITLE, () => {
         dotfiles: "deny",
     }))
 
-    const request = axiosist(app)
+    const request = supertest(app)
 
     it(`replaceString()`, async () => {
-        await request.get("/foo.html").then(res => assert.match(String(res.data), /foo/))
-        await request.get("/bar/bar.css").then(res => assert.match(String(res.data), /bar/))
-        await request.get("/bar/buz/buz.js").then(res => assert.match(String(res.data), /buz/))
+        await request.get("/foo.html").then(res => assert.match(res.text, /foo/))
+        await request.get("/bar/bar.css").then(res => assert.match(res.text, /bar/))
+        await request.get("/bar/buz/buz.js").then(res => assert.match(res.text, /buz/))
         await request.get("/not-found.html").then(res => assert.equal(res.status, 404))
         await request.get("/.htaccess").then(res => assert.equal(res.status, 403))
     })

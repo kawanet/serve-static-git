@@ -1,7 +1,7 @@
 import {strict as assert} from "node:assert";
 import {describe, it} from "node:test";
 import {fileURLToPath} from "node:url";
-import axiosist from "axiosist";
+import supertest from "supertest";
 import express from "express5";
 import finalhandler from "finalhandler";
 import * as http from "node:http";
@@ -19,11 +19,11 @@ describe(TITLE, () => {
 
     it(`express@5 .use(serve)`, async () => {
         const app = express().use(serve)
-        const request = axiosist(app)
+        const request = supertest(app)
 
         const res = await request.get(`/foo.html`)
         assert.equal(res.status, 200)
-        assert.match(String(res.data), /Foo/)
+        assert.match(res.text, /Foo/)
         assert.match(res.headers["content-type"], /^text\/html/)
         assert.ok(res.headers.etag, "should have an eTag")
 
@@ -35,10 +35,10 @@ describe(TITLE, () => {
 
     it(`express@5 + finalhandler via http.createServer`, async () => {
         const app = http.createServer((req, res) => serve(req, res, finalhandler(req, res)))
-        const request = axiosist(app)
+        const request = supertest(app)
 
         const res = await request.get(`/bar/bar.css`)
         assert.equal(res.status, 200)
-        assert.match(String(res.data), /Bar/)
+        assert.match(res.text, /Bar/)
     })
 })

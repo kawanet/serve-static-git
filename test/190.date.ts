@@ -1,7 +1,8 @@
 import {strict as assert} from "node:assert";
 import {describe, it} from "node:test";
 import {fileURLToPath} from "node:url";
-import axiosist from "axiosist";
+import * as http from "node:http";
+import supertest from "supertest";
 import finalhandler from "finalhandler";
 
 import {serveStaticGit} from "../lib/index.ts";
@@ -19,14 +20,14 @@ describe(TITLE, () => {
             lastModified: options.lastModified,
         })
 
-        return axiosist((req, res) => serve(req, res, finalhandler(req, res)))
+        return supertest(http.createServer((req, res) => serve(req, res, finalhandler(req, res))))
     };
 
     it(`lastModified: false`, async () => {
         const request = makeRequest({lastModified: false})
         const res = await request.get(`/foo.html`)
         assert.strictEqual(res.status, 200)
-        assert.match(String(res.data), /Foo/)
+        assert.match(res.text, /Foo/)
         assert.match(res.headers["date"], VALID_DATE)
         assert.equal(res.headers["last-modified"], undefined, "should NOT have an Last-Modified:")
     })
@@ -35,7 +36,7 @@ describe(TITLE, () => {
         const request = makeRequest({lastModified: true})
         const res = await request.get(`/bar/bar.css`)
         assert.strictEqual(res.status, 200)
-        assert.match(String(res.data), /Bar/)
+        assert.match(res.text, /Bar/)
         assert.match(res.headers["date"], VALID_DATE)
         assert.match(res.headers["last-modified"], VALID_DATE)
     })
@@ -44,7 +45,7 @@ describe(TITLE, () => {
         const request = makeRequest({})
         const res = await request.get(`/bar/buz/buz.js`)
         assert.strictEqual(res.status, 200)
-        assert.match(String(res.data), /Buz/)
+        assert.match(res.text, /Buz/)
         assert.match(res.headers["date"], VALID_DATE)
         assert.match(res.headers["last-modified"], VALID_DATE)
     })
@@ -53,7 +54,7 @@ describe(TITLE, () => {
         const request = makeRequest({lastModified: "X-Commit-Date"})
         const res = await request.get(`/bar/buz/`)
         assert.strictEqual(res.status, 200)
-        assert.match(String(res.data), /Index/)
+        assert.match(res.text, /Index/)
         assert.match(res.headers["date"], VALID_DATE)
         assert.match(res.headers["x-commit-date"], VALID_DATE)
     })
