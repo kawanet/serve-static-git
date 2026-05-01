@@ -1,5 +1,10 @@
 #!/usr/bin/env bash -v
 
+# Ignore the host's global git config so any commit signing settings
+# (commit.gpgsign etc.) do not contaminate the test fixture. Same guard
+# used in kawanet/git-cat-file (see kawanet-labs/m4-labs-code#88).
+export GIT_CONFIG_GLOBAL=/dev/null
+
 cd $(dirname $0)/..
 /bin/rm -fr repo/loose1 repo/packed1 repo/bare1.git
 

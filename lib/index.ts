@@ -2,11 +2,12 @@
  * https://github.com/kawanet/serve-static-git
  */
 
-import {openLocalRepo, GCF} from "git-cat-file"
-import type * as http from "http"
-import * as mime from "mime"
+import {openLocalRepo} from "git-cat-file"
+import type {GCF} from "git-cat-file"
+import type * as http from "node:http"
+import mime from "mime"
 
-import type {SSG} from ".."
+import type {SSG} from "../types/serve-static-git.d.ts"
 
 export function serveStaticGit(options: SSG.Options): SSG.RequestHandler<http.ServerResponse> {
     if (!/\.git$/.test(options.repo)) {

@@ -1,13 +1,14 @@
-#!/usr/bin/env mocha -R spec
-
-import {strict as assert} from "assert";
+import {strict as assert} from "node:assert";
+import {describe, it} from "node:test";
+import {fileURLToPath} from "node:url";
 import axiosist from "axiosist";
-import * as finalhandler from "finalhandler";
+import finalhandler from "finalhandler";
 
-import {serveStaticGit, SSG} from "..";
+import {serveStaticGit} from "../lib/index.ts";
+import type {SSG} from "../types/serve-static-git.d.ts";
 
-const BASE = __dirname.replace(/\/[^/]+\/?$/, "")
-const TITLE = __filename.split("/").pop()!
+const BASE = fileURLToPath(new URL(".", import.meta.url)).replace(/\/[^/]+\/?$/, "")
+const TITLE = fileURLToPath(import.meta.url).split("/").pop()!
 
 describe(TITLE, () => {
     const makeRequest = (options: Pick<SSG.Options, "commit">) => {

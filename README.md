@@ -3,15 +3,15 @@
 [![Node.js CI](https://github.com/kawanet/serve-static-git/workflows/Node.js%20CI/badge.svg?branch=main)](https://github.com/kawanet/serve-static-git/actions/)
 [![npm version](https://img.shields.io/npm/v/serve-static-git)](https://www.npmjs.com/package/serve-static-git)
 
-Express middleware to serve static files directly from `.git` repository
+Express middleware to serve static files directly from a `.git` repository.
 
 ## SYNOPSIS
 
 With Express.js:
 
 ```js
-const express = require("express");
-const {serveStaticGit} = require("serve-static-git");
+import express from "express";
+import {serveStaticGit} from "serve-static-git";
 
 const app = express();
 
@@ -26,9 +26,9 @@ app.listen(3000);
 With vanilla Node.js `http` module:
 
 ```js
-const http = require("http");
-const finalhandler = require('finalhandler')
-const {serveStaticGit} = require("serve-static-git");
+import http from "node:http";
+import finalhandler from "finalhandler";
+import {serveStaticGit} from "serve-static-git";
 
 const serve = serveStaticGit({
   repo: "path/to/bare.git",
@@ -37,9 +37,9 @@ const serve = serveStaticGit({
 
 const server = http.createServer((req, res) => {
   serve(req, res, finalhandler(req, res))
-})
+});
 
-server.listen(3000)
+server.listen(3000);
 ```
 
 ### LINKS
@@ -53,7 +53,7 @@ server.listen(3000)
 
 MIT License
 
-Copyright (c) 2021-2023 Yusuke Kawasaki
+Copyright (c) 2021-2026 Yusuke Kawasaki
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
