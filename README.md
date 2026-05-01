@@ -3,7 +3,7 @@
 [![Node.js CI](https://github.com/kawanet/serve-static-git/workflows/Node.js%20CI/badge.svg?branch=main)](https://github.com/kawanet/serve-static-git/actions/)
 [![npm version](https://img.shields.io/npm/v/serve-static-git)](https://www.npmjs.com/package/serve-static-git)
 
-Express middleware to serve static files directly from a `.git` repository.
+Express middleware to serve static files directly from a `.git` repository. Compatible with Express 4.x and 5.x.
 
 ## SYNOPSIS
 
