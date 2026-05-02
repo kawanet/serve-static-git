@@ -13,6 +13,11 @@ CJS_CONFIG := ./rollup-cjs.config.ts
 # built-in — fail the build so it cannot slip in.
 MAX_BYTES := 10000
 
+# Every named export the package documents must survive the round trip
+# through both CJS and ESM bundles. List them once and assert in both
+# smoke checks below.
+NAMED_EXPORTS := serveStaticGit
+
 ALL := $(MJS_DST) $(CJS_DST) $(PKG_DST)
 
 ####
@@ -41,10 +46,13 @@ $(CJS_DST): $(CJS_CONFIG) $(SRC) $(BUILDER_SRC)
 
 ####
 
-# Build, type-check, and run the node:test suite. The signed/unsigned
-# fixture matrix lives under test/test-prepare.sh.
+# Build, type-check, smoke-check that both bundles expose every named
+# export, and run the node:test suite against the source. The
+# signed/unsigned fixture matrix lives under test/test-prepare.sh.
 test: all
 	../node_modules/.bin/tsc --noEmit
+	cd .. && node --input-type=commonjs -e 'const m = require("./dist/serve-static-git.cjs"); for (const k of "$(NAMED_EXPORTS)".split(" ")) if (typeof m[k] !== "function") { console.error("missing CJS export:", k); process.exit(1); } console.log("CJS smoke OK")'
+	cd .. && node --input-type=module    -e 'const m = await import("./dist/serve-static-git.mjs"); for (const k of "$(NAMED_EXPORTS)".split(" ")) if (typeof m[k] !== "function") { console.error("missing MJS export:", k); process.exit(1); } console.log("MJS smoke OK")'
 	cd .. && rm -rf repo/ && bash test/test-prepare.sh
 	cd .. && node --test test/*.ts
 
