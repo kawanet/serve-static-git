@@ -1,7 +1,8 @@
 import {strict as assert} from "node:assert";
 import {describe, it} from "node:test";
 import {fileURLToPath} from "node:url";
-import axiosist from "axiosist";
+import * as http from "node:http";
+import supertest from "supertest";
 import finalhandler from "finalhandler";
 
 import {serveStaticGit} from "../lib/index.ts";
@@ -19,7 +20,7 @@ describe(TITLE, () => {
                 repo: `${BASE}/${repo}`,
                 root: `htdocs`,
             })
-            const request = axiosist((req, res) => serve(req, res, finalhandler(req, res)))
+            const request = supertest(http.createServer((req, res) => serve(req, res, finalhandler(req, res))))
             await request.get("/foo.html").then(res => assert.equal(res.status, 200))
             await request.get("/bar/bar.css").then(res => assert.equal(res.status, 200))
             await request.get("/bar/buz/buz.js").then(res => assert.equal(res.status, 200))

@@ -1,7 +1,7 @@
 import {strict as assert} from "node:assert";
 import {describe, it} from "node:test";
 import {fileURLToPath} from "node:url";
-import axiosist from "axiosist";
+import supertest from "supertest";
 import express from "express4";
 import finalhandler from "finalhandler";
 import * as http from "node:http";
@@ -19,11 +19,11 @@ describe(TITLE, () => {
 
     it(`express`, async () => {
         const app = express().use(serve)
-        const request = axiosist(app)
+        const request = supertest(app)
 
         const res = await request.get(`/foo.html`)
         assert.strictEqual(res.status, 200)
-        assert.match(String(res.data), /Foo/)
+        assert.match(res.text, /Foo/)
         assert.match(res.headers["content-type"], /^text\/html/)
         assert.ok(res.headers.etag, "should have an eTag")
 
@@ -32,16 +32,16 @@ describe(TITLE, () => {
         await request.get("/bar/buz/buz.js").then(res => assert.equal(res.status, 200))
         await request.get(`/not-found.html`).then(res => assert.equal(res.status, 404))
 
-        await request.get("/foo.html?_=1638157880").then(res => assert.match(String(res.data), /Foo/))
+        await request.get("/foo.html?_=1638157880").then(res => assert.match(res.text, /Foo/))
     })
 
     it(`createServer`, async () => {
         const app = http.createServer((req, res) => serve(req, res, finalhandler(req, res)))
-        const request = axiosist(app)
+        const request = supertest(app)
 
         const res = await request.get(`/bar/bar.css`)
         assert.strictEqual(res.status, 200)
-        assert.match(String(res.data), /Bar/)
+        assert.match(res.text, /Bar/)
         assert.match(res.headers["content-type"], /^text\/css/)
         assert.ok(res.headers.etag, "should have an eTag")
 
@@ -50,15 +50,15 @@ describe(TITLE, () => {
         await request.get("/bar/buz/buz.js").then(res => assert.equal(res.status, 200))
         await request.get(`/bar/not-found.html`).then(res => assert.equal(res.status, 404))
 
-        await request.get("/foo.html?_=1638157880").then(res => assert.match(String(res.data), /Foo/))
+        await request.get("/foo.html?_=1638157880").then(res => assert.match(res.text, /Foo/))
     })
 
     it(`finalhandler`, async () => {
-        const request = axiosist((req, res) => serve(req, res, finalhandler(req, res)))
+        const request = supertest(http.createServer((req, res) => serve(req, res, finalhandler(req, res))))
 
         const res = await request.get(`/bar/buz/buz.js`)
         assert.strictEqual(res.status, 200)
-        assert.match(String(res.data), /Buz/)
+        assert.match(res.text, /Buz/)
         assert.match(res.headers["content-type"], /^application\/javascript/)
         assert.ok(res.headers.etag, "should have an eTag")
 
@@ -67,6 +67,6 @@ describe(TITLE, () => {
         await request.get("/bar/buz/buz.js").then(res => assert.equal(res.status, 200))
         await request.get(`/bar/buz/not-found.html`).then(res => assert.equal(res.status, 404))
 
-        await request.get("/foo.html?_=1638157880").then(res => assert.match(String(res.data), /Foo/))
+        await request.get("/foo.html?_=1638157880").then(res => assert.match(res.text, /Foo/))
     })
 })

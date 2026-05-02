@@ -1,7 +1,7 @@
 import {strict as assert} from "node:assert";
 import {describe, it} from "node:test";
 import {fileURLToPath} from "node:url";
-import axiosist from "axiosist";
+import supertest from "supertest";
 import express from "express4";
 import * as qs from "qs-lite";
 
@@ -19,12 +19,12 @@ describe(TITLE, () => {
         })
 
         const app = express().use(serve)
-        const request = axiosist(app)
+        const request = supertest(app)
 
-        await request.get("/foo.html?refs=main").then(res => assert.match(String(res.data), /Foo/))
-        await request.get("/foo.html?refs=upper").then(res => assert.match(String(res.data), /FOO/))
-        await request.get("/foo.html?refs=main-tag").then(res => assert.match(String(res.data), /Foo/))
-        await request.get("/foo.html?refs=upper-tag").then(res => assert.match(String(res.data), /FOO/))
+        await request.get("/foo.html?refs=main").then(res => assert.match(res.text, /Foo/))
+        await request.get("/foo.html?refs=upper").then(res => assert.match(res.text, /FOO/))
+        await request.get("/foo.html?refs=main-tag").then(res => assert.match(res.text, /Foo/))
+        await request.get("/foo.html?refs=upper-tag").then(res => assert.match(res.text, /FOO/))
         await request.get("/foo.html").then(res => assert.equal(res.status, 404))
     })
 
@@ -36,12 +36,12 @@ describe(TITLE, () => {
         })
 
         const app = express().use(serve)
-        const request = axiosist(app)
+        const request = supertest(app)
 
-        await request.get("/foo.html", {headers: {"X-Refs": "main"}}).then(res => assert.match(String(res.data), /Foo/))
-        await request.get("/foo.html", {headers: {"X-Refs": "upper"}}).then(res => assert.match(String(res.data), /FOO/))
-        await request.get("/foo.html", {headers: {"X-Refs": "main-tag"}}).then(res => assert.match(String(res.data), /Foo/))
-        await request.get("/foo.html", {headers: {"X-Refs": "upper-tag"}}).then(res => assert.match(String(res.data), /FOO/))
+        await request.get("/foo.html").set("X-Refs", "main").then(res => assert.match(res.text, /Foo/))
+        await request.get("/foo.html").set("X-Refs", "upper").then(res => assert.match(res.text, /FOO/))
+        await request.get("/foo.html").set("X-Refs", "main-tag").then(res => assert.match(res.text, /Foo/))
+        await request.get("/foo.html").set("X-Refs", "upper-tag").then(res => assert.match(res.text, /FOO/))
         await request.get("/foo.html").then(res => assert.equal(res.status, 404))
     })
 })

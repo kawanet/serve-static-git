@@ -1,7 +1,8 @@
 import {strict as assert} from "node:assert";
 import {describe, it} from "node:test";
 import {fileURLToPath} from "node:url";
-import axiosist from "axiosist";
+import * as http from "node:http";
+import supertest from "supertest";
 import finalhandler from "finalhandler";
 
 import {serveStaticGit} from "../lib/index.ts";
@@ -18,7 +19,7 @@ describe(TITLE, () => {
             dotfiles: options.dotfiles,
         })
 
-        return axiosist((req, res) => serve(req, res, finalhandler(req, res)))
+        return supertest(http.createServer((req, res) => serve(req, res, finalhandler(req, res))))
     };
 
     it(`dotfiles: "ignore"`, async () => {

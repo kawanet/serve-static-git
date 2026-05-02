@@ -1,7 +1,8 @@
 import {strict as assert} from "node:assert";
 import {describe, it} from "node:test";
 import {fileURLToPath} from "node:url";
-import axiosist from "axiosist";
+import * as http from "node:http";
+import supertest from "supertest";
 import finalhandler from "finalhandler";
 
 import {serveStaticGit} from "../lib/index.ts";
@@ -15,24 +16,24 @@ describe(TITLE, () => {
         root: `htdocs`,
     })
 
-    const request = axiosist((req, res) => serve(req, res, finalhandler(req, res)))
+    const request = supertest(http.createServer((req, res) => serve(req, res, finalhandler(req, res))))
 
-    it(`maxRedirects: 0`, async () => {
-        await request.get("/bar/buz", {maxRedirects: 0}).then(res => {
+    it(`301 without following`, async () => {
+        await request.get("/bar/buz").then(res => {
             assert.equal(res.status, 301, "/bar/buz")
             assert.match(res.headers.location, /\/bar\/buz\/$/)
         })
 
-        await request.get("/bar/buz?_=1638157880", {maxRedirects: 0}).then(res => {
+        await request.get("/bar/buz?_=1638157880").then(res => {
             assert.equal(res.status, 301, "/bar/buz?_=1638157880")
             assert.match(res.headers.location, /\/bar\/buz\/\?_=1638157880$/)
         })
     })
 
-    it(`maxRedirects: 1`, async () => {
-        await request.get("/bar/buz", {maxRedirects: 1}).then(res => {
+    it(`follow one redirect`, async () => {
+        await request.get("/bar/buz").redirects(1).then(res => {
             assert.equal(res.status, 200, "/bar/buz")
-            assert.match(String(res.data), /Index/)
+            assert.match(res.text, /Index/)
         })
     })
 })

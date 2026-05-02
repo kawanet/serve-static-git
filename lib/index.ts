@@ -100,7 +100,7 @@ export function serveStaticGit(options: SSG.Options): SSG.RequestHandler<http.Se
             }
         }
 
-        const type = mime.lookup(path)
+        const type = mime.getType(path)
         if (type) res.setHeader("Content-Type", type)
 
         if (etag) res.setHeader("ETag", `W/${file.oid}`)
