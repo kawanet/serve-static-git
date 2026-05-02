@@ -44,7 +44,7 @@ describe(TITLE, () => {
         const res = await request.get(`/bar/buz/buz.js`)
         assert.strictEqual(res.status, 200)
         assert.match(res.text, /Buz/)
-        assert.match(res.headers["content-type"], /^text\/javascript/)
+        assert.match(res.headers["content-type"], /^application\/javascript/)
         assert.match(res.headers["x-commit"], /^[0-9a-fA-F]{40,}$/)
     })
 

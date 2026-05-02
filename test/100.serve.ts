@@ -59,7 +59,7 @@ describe(TITLE, () => {
         const res = await request.get(`/bar/buz/buz.js`)
         assert.strictEqual(res.status, 200)
         assert.match(res.text, /Buz/)
-        assert.match(res.headers["content-type"], /^text\/javascript/)
+        assert.match(res.headers["content-type"], /^application\/javascript/)
         assert.ok(res.headers.etag, "should have an eTag")
 
         await request.get("/foo.html").then(res => assert.equal(res.status, 200))
