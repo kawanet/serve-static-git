@@ -51,8 +51,8 @@ $(CJS_DST): $(CJS_CONFIG) $(SRC) $(BUILDER_SRC)
 # signed/unsigned fixture matrix lives under test/test-prepare.sh.
 test: all
 	../node_modules/.bin/tsc --noEmit
-	cd .. && node --input-type=commonjs -e 'const m = require("./dist/serve-static-git.cjs"); for (const k of "$(NAMED_EXPORTS)".split(" ")) if (typeof m[k] !== "function") { console.error("missing CJS export:", k); process.exit(1); } console.log("CJS smoke OK")'
-	cd .. && node --input-type=module    -e 'const m = await import("./dist/serve-static-git.mjs"); for (const k of "$(NAMED_EXPORTS)".split(" ")) if (typeof m[k] !== "function") { console.error("missing MJS export:", k); process.exit(1); } console.log("MJS smoke OK")'
+	cd .. && node --input-type=commonjs -e 'const m = require("./dist/serve-static-git.cjs"); for (const k of process.argv.slice(1)) { if (typeof m[k] !== "function") { console.error("missing CJS export:", k); process.exit(1); } console.log("CJS export OK:", k); }' $(NAMED_EXPORTS)
+	cd .. && node --input-type=module    -e 'const m = await import("./dist/serve-static-git.mjs"); for (const k of process.argv.slice(1)) { if (typeof m[k] !== "function") { console.error("missing MJS export:", k); process.exit(1); } console.log("MJS export OK:", k); }' $(NAMED_EXPORTS)
 	cd .. && rm -rf repo/ && bash test/test-prepare.sh
 	cd .. && node --test test/*.ts
 
