@@ -1,7 +1,6 @@
 SRC := $(wildcard ../lib/*.ts ../types/*.ts)
 BUILDER_SRC := $(wildcard ./*.ts)
 
-PKG_DST := ../dist/package.json
 MJS_DST := ../dist/serve-static-git.mjs
 CJS_DST := ../dist/serve-static-git.cjs
 
@@ -18,17 +17,11 @@ MAX_BYTES := 10000
 # smoke checks below.
 NAMED_EXPORTS := serveStaticGit
 
-ALL := $(MJS_DST) $(CJS_DST) $(PKG_DST)
+ALL := $(MJS_DST) $(CJS_DST)
 
 ####
 
 all: $(ALL)
-
-$(PKG_DST):
-	@mkdir -p $(dir $@)
-	echo '{"type":"commonjs"}' > $@
-	@ls -l $@
-	@echo ""
 
 $(MJS_DST): $(MJS_CONFIG) $(SRC) $(BUILDER_SRC)
 	@mkdir -p $(dir $@)

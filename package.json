@@ -45,7 +45,6 @@
     "README.md",
     "dist/serve-static-git.cjs",
     "dist/serve-static-git.mjs",
-    "dist/package.json",
     "lib/*.ts",
     "types/*.d.ts"
   ],
