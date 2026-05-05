@@ -7,7 +7,7 @@ import type {GCF} from "git-cat-file"
 import type * as http from "node:http"
 import mime from "mime"
 
-import type {SSG} from "../types/serve-static-git.d.ts"
+import type {SSG} from "serve-static-git"
 
 export function serveStaticGit(options: SSG.Options): SSG.RequestHandler<http.ServerResponse> {
     if (!/\.git$/.test(options.repo)) {
