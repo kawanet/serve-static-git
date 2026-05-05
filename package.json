@@ -40,11 +40,9 @@
   },
   "exports": {
     ".": {
+      "types": "./types/serve-static-git.d.ts",
       "require": "./dist/serve-static-git.cjs",
-      "import": {
-        "types": "./types/serve-static-git.d.ts",
-        "default": "./dist/serve-static-git.mjs"
-      }
+      "import": "./dist/serve-static-git.mjs"
     }
   },
   "files": [
