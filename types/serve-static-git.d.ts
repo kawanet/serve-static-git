@@ -4,6 +4,8 @@
 
 import type * as http from "http";
 
+export {} // external module indicator
+
 export const serveStaticGit: (options: SSG.Options) => SSG.RequestHandler;
 
 export declare namespace SSG {
