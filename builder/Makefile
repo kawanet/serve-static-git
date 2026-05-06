@@ -8,10 +8,10 @@ CJS_DST := ../dist/serve-static-git.cjs
 MJS_CONFIG := ./rollup-mjs.config.ts
 CJS_CONFIG := ./rollup-cjs.config.ts
 
-# The middleware itself is small (~3 KB). If it gets significantly larger,
+# The middleware itself is small. If it gets significantly larger,
 # it might indicate an accidental inclusion of an external dependency or
 # a Node.js built-in.
-MAX_BYTES := 10000
+MAX_BYTES := 5000
 
 # Documentation-specified named exports that must be verified in the bundles.
 NAMED_EXPORTS := serveStaticGit
@@ -85,9 +85,7 @@ smoke-cjs: $(CJS_DST)
 ####
 
 # Build, run smoke tests, and conditionally run full tests (tsc and node:test).
-# 1. Skip on Node.js 20 (already EOL).
-# 2. Skip during 'npm install' (npm_command=install) to prevent redundant tests in CI and local dev.
-# Informative messages are shown when skipping.
+# Skip during 'npm install' (npm_command=install) to prevent redundant tests in CI and local dev.
 test: all smoke $(TYPES)
 	@ [ "$$npm_command" != "install" ] || echo "npm install detected: skipping full tests."
 	@ [ "$$npm_command" = "install" ] || $(MAKE) test-ts
