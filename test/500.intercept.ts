@@ -1,10 +1,9 @@
+import {responseHandler} from "express-intercept"
 import express from "express4"
 import {strict as assert} from "node:assert"
 import {describe, it} from "node:test"
 import {fileURLToPath} from "node:url"
 import supertest from "supertest"
-
-import {responseHandler} from "express-intercept"
 import {serveStaticGit} from "../lib/index.ts"
 
 const BASE = fileURLToPath(new URL(".", import.meta.url)).replace(/\/[^/]+\/?$/, "")

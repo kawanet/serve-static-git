@@ -4,7 +4,6 @@ import * as http from "node:http"
 import {describe, it} from "node:test"
 import {fileURLToPath} from "node:url"
 import supertest from "supertest"
-
 import {serveStaticGit} from "../lib/index.ts"
 
 const BASE = fileURLToPath(new URL(".", import.meta.url)).replace(/\/[^/]+\/?$/, "")

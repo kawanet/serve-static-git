@@ -6,7 +6,6 @@ import type {GCF} from "git-cat-file"
 import {openLocalRepo} from "git-cat-file"
 import mime from "mime"
 import type * as http from "node:http"
-
 import type {SSG} from "serve-static-git"
 
 export function serveStaticGit(options: SSG.Options): SSG.RequestHandler<http.ServerResponse> {
