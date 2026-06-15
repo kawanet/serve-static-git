@@ -1,11 +1,11 @@
-import {strict as assert} from "node:assert";
-import {describe, it} from "node:test";
-import {fileURLToPath} from "node:url";
-import supertest from "supertest";
-import express from "express4";
-import * as qs from "qs-lite";
+import {strict as assert} from "node:assert"
+import {describe, it} from "node:test"
+import {fileURLToPath} from "node:url"
+import supertest from "supertest"
+import express from "express4"
+import * as qs from "qs-lite"
 
-import {serveStaticGit} from "../lib/index.ts";
+import {serveStaticGit} from "../lib/index.ts"
 
 const BASE = fileURLToPath(new URL(".", import.meta.url)).replace(/\/[^/]+\/?$/, "")
 const TITLE = fileURLToPath(import.meta.url).split("/").pop()!
@@ -15,7 +15,7 @@ describe(TITLE, () => {
         const serve = serveStaticGit({
             repo: `${BASE}/repo/loose1/.git`,
             root: `htdocs`,
-            refs: req => qs.parse(String(req.url).split("?")[1]).refs
+            refs: req => qs.parse(String(req.url).split("?")[1]).refs,
         })
 
         const app = express().use(serve)
@@ -32,7 +32,7 @@ describe(TITLE, () => {
         const serve = serveStaticGit({
             repo: `${BASE}/repo/loose1/.git`,
             root: `htdocs`,
-            refs: req => String(req.headers["x-refs"])
+            refs: req => String(req.headers["x-refs"]),
         })
 
         const app = express().use(serve)

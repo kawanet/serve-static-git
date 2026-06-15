@@ -2,11 +2,11 @@
  * https://github.com/kawanet/serve-static-git
  */
 
-import type * as http from "http";
+import type * as http from "http"
 
 export {} // external module indicator
 
-export const serveStaticGit: (options: SSG.Options) => SSG.RequestHandler;
+export const serveStaticGit: (options: SSG.Options) => SSG.RequestHandler
 
 export declare namespace SSG {
     interface Options {
@@ -16,19 +16,19 @@ export declare namespace SSG {
          * @example "path/to/bare/repository.git"
          * @example "path/to/working/repository/.git"
          */
-        repo: string;
+        repo: string
 
         /**
          * Document root within the repository.
          */
-        root?: string;
+        root?: string
 
         /**
          * Resolves the branch, tag, or commit id from the incoming request.
          *
          * @default `req => req.headers.host.split(/[.:]/).shift()`
          */
-        refs?: <R extends http.IncomingMessage>(req: R) => string;
+        refs?: <R extends http.IncomingMessage>(req: R) => string
 
         /**
          * How to handle requests for dot-files (paths whose final segment
@@ -40,7 +40,7 @@ export declare namespace SSG {
          *
          * @default `ignore`
          */
-        dotfiles?: "allow" | "deny" | "ignore";
+        dotfiles?: "allow" | "deny" | "ignore"
 
         /**
          * Whether to send an `ETag` header derived from the SHA-1 object id.
@@ -50,14 +50,14 @@ export declare namespace SSG {
          *
          * @default `true`
          */
-        etag?: boolean;
+        etag?: boolean
 
         /**
          * File name(s) to serve for a directory URL ending in `/`.
          *
          * @default `index.html`
          */
-        index?: string | string[];
+        index?: string | string[]
 
         /**
          * Whether (and under which name) to send a header carrying the
@@ -69,7 +69,7 @@ export declare namespace SSG {
          *
          * @default `X-Commit`
          */
-        commit?: string | boolean;
+        commit?: string | boolean
 
         /**
          * Whether (and under which name) to send a header carrying the
@@ -81,10 +81,10 @@ export declare namespace SSG {
          *
          * @default `Last-Modified`
          */
-        lastModified?: string | boolean;
+        lastModified?: string | boolean
     }
 
     interface RequestHandler<R extends http.ServerResponse> {
-        (request: http.IncomingMessage, response: R, next: () => void): any;
+        (request: http.IncomingMessage, response: R, next: () => void): any
     }
 }

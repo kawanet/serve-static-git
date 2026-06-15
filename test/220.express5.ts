@@ -1,12 +1,12 @@
-import {strict as assert} from "node:assert";
-import {describe, it} from "node:test";
-import {fileURLToPath} from "node:url";
-import supertest from "supertest";
-import express from "express5";
-import finalhandler from "finalhandler";
-import * as http from "node:http";
+import {strict as assert} from "node:assert"
+import {describe, it} from "node:test"
+import {fileURLToPath} from "node:url"
+import supertest from "supertest"
+import express from "express5"
+import finalhandler from "finalhandler"
+import * as http from "node:http"
 
-import {serveStaticGit} from "../lib/index.ts";
+import {serveStaticGit} from "../lib/index.ts"
 
 const BASE = fileURLToPath(new URL(".", import.meta.url)).replace(/\/[^/]+\/?$/, "")
 const TITLE = fileURLToPath(import.meta.url).split("/").pop()!

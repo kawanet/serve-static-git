@@ -1,16 +1,16 @@
-import {strict as assert} from "node:assert";
-import {describe, it} from "node:test";
-import {fileURLToPath} from "node:url";
-import * as http from "node:http";
-import supertest from "supertest";
-import finalhandler from "finalhandler";
+import {strict as assert} from "node:assert"
+import {describe, it} from "node:test"
+import {fileURLToPath} from "node:url"
+import * as http from "node:http"
+import supertest from "supertest"
+import finalhandler from "finalhandler"
 
-import {serveStaticGit} from "../lib/index.ts";
-import type {SSG} from "../types/serve-static-git.d.ts";
+import {serveStaticGit} from "../lib/index.ts"
+import type {SSG} from "../types/serve-static-git.d.ts"
 
 const BASE = fileURLToPath(new URL(".", import.meta.url)).replace(/\/[^/]+\/?$/, "")
 const TITLE = fileURLToPath(import.meta.url).split("/").pop()!
-const VALID_DATE = /^\w{3}, \d{2} \w{3} \d{4} \d{2}:\d{2}:\d{2} GMT/;
+const VALID_DATE = /^\w{3}, \d{2} \w{3} \d{4} \d{2}:\d{2}:\d{2} GMT/
 
 describe(TITLE, () => {
     const makeRequest = (options: Pick<SSG.Options, "lastModified">) => {
@@ -21,7 +21,7 @@ describe(TITLE, () => {
         })
 
         return supertest(http.createServer((req, res) => serve(req, res, finalhandler(req, res))))
-    };
+    }
 
     it(`lastModified: false`, async () => {
         const request = makeRequest({lastModified: false})
