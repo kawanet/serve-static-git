@@ -2,11 +2,10 @@
  * https://github.com/kawanet/serve-static-git
  */
 
-import {openLocalRepo} from "git-cat-file"
 import type {GCF} from "git-cat-file"
-import type * as http from "node:http"
+import {openLocalRepo} from "git-cat-file"
 import mime from "mime"
-
+import type * as http from "node:http"
 import type {SSG} from "serve-static-git"
 
 export function serveStaticGit(options: SSG.Options): SSG.RequestHandler<http.ServerResponse> {
@@ -20,13 +19,13 @@ export function serveStaticGit(options: SSG.Options): SSG.RequestHandler<http.Se
     if (root) root = root.replace(/\/?$/, "/")
 
     const etag = (options.etag !== false)
-    const commitOpt = (options.commit == null) || options.commit;
-    const lastModified = (options.lastModified == null) || options.lastModified;
+    const commitOpt = (options.commit == null) || options.commit
+    const lastModified = (options.lastModified == null) || options.lastModified
     const dotfiles = options.dotfiles || "ignore"
 
     return async (req, res, next) => {
         const host = String(req.headers.host)
-        let commit: GCF.Commit;
+        let commit: GCF.Commit
 
         if (options.refs) {
             const rev = options.refs(req)
@@ -73,13 +72,13 @@ export function serveStaticGit(options: SSG.Options): SSG.RequestHandler<http.Se
                 return
             }
 
-            const indexList = Array.isArray(options.index) ? options.index : options.index ? [options.index] : ["index.html"];
+            const indexList = Array.isArray(options.index) ? options.index : options.index ? [options.index] : ["index.html"]
             for (const index of indexList) {
                 const indexPath = path.replace(/\/*$/, `/${index}`)
                 const entry = await tree.getEntry(indexPath)
                 if (entry) {
                     path = indexPath
-                    break;
+                    break
                 }
             }
         }
@@ -88,14 +87,14 @@ export function serveStaticGit(options: SSG.Options): SSG.RequestHandler<http.Se
         if (!file) return next()
 
         if (commitOpt) {
-            const commitKey = (commitOpt !== true) && commitOpt || "X-Commit";
+            const commitKey = (commitOpt !== true) && commitOpt || "X-Commit"
             res.setHeader(commitKey, commit.getId())
         }
 
         if (lastModified) {
             const dt = commit.getDate()
             if (dt) {
-                const dateKey = (lastModified !== true) && lastModified || "Last-Modified";
+                const dateKey = (lastModified !== true) && lastModified || "Last-Modified"
                 res.setHeader(dateKey, dt.toUTCString())
             }
         }

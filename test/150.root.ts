@@ -1,12 +1,11 @@
-import {strict as assert} from "node:assert";
-import {describe, it} from "node:test";
-import {fileURLToPath} from "node:url";
-import * as http from "node:http";
-import supertest from "supertest";
-import finalhandler from "finalhandler";
-
-import {serveStaticGit} from "../lib/index.ts";
-import type {SSG} from "../types/serve-static-git.d.ts";
+import finalhandler from "finalhandler"
+import {strict as assert} from "node:assert"
+import * as http from "node:http"
+import {describe, it} from "node:test"
+import {fileURLToPath} from "node:url"
+import supertest from "supertest"
+import {serveStaticGit} from "../lib/index.ts"
+import type {SSG} from "../types/serve-static-git.d.ts"
 
 const BASE = fileURLToPath(new URL(".", import.meta.url)).replace(/\/[^/]+\/?$/, "")
 const TITLE = fileURLToPath(import.meta.url).split("/").pop()!
@@ -15,11 +14,11 @@ describe(TITLE, () => {
     const makeRequest = (options: Pick<SSG.Options, "root">) => {
         const serve = serveStaticGit({
             repo: `${BASE}/repo/loose1/.git`,
-            root: options.root
+            root: options.root,
         })
 
         return supertest(http.createServer((req, res) => serve(req, res, finalhandler(req, res))))
-    };
+    }
 
     it(`root: "htdocs"`, async () => {
         const request = makeRequest({root: "htdocs"})
