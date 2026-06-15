@@ -1,8 +1,8 @@
+import express from "express4"
 import {strict as assert} from "node:assert"
 import {describe, it} from "node:test"
 import {fileURLToPath} from "node:url"
 import supertest from "supertest"
-import express from "express4"
 
 import {serveStaticGit} from "../lib/index.ts"
 

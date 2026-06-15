@@ -2,10 +2,10 @@
  * https://github.com/kawanet/serve-static-git
  */
 
-import {openLocalRepo} from "git-cat-file"
 import type {GCF} from "git-cat-file"
-import type * as http from "node:http"
+import {openLocalRepo} from "git-cat-file"
 import mime from "mime"
+import type * as http from "node:http"
 
 import type {SSG} from "serve-static-git"
 

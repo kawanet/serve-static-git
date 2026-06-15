@@ -1,10 +1,10 @@
+import express from "express4"
+import finalhandler from "finalhandler"
 import {strict as assert} from "node:assert"
+import * as http from "node:http"
 import {describe, it} from "node:test"
 import {fileURLToPath} from "node:url"
 import supertest from "supertest"
-import express from "express4"
-import finalhandler from "finalhandler"
-import * as http from "node:http"
 
 import {serveStaticGit} from "../lib/index.ts"
 
