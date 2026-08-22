@@ -5,45 +5,35 @@ import {describe, it} from "node:test"
 import {fileURLToPath} from "node:url"
 import supertest from "supertest"
 import {serveStaticGit} from "../lib/index.ts"
-import type {SSG} from "../types/serve-static-git.d.ts"
 
-const BASE = fileURLToPath(new URL(".", import.meta.url)).replace(/\/[^/]+\/?$/, "")
+const BASE = process.cwd()
 const TITLE = fileURLToPath(import.meta.url).split("/").pop()!
 
 describe(TITLE, () => {
-    const makeRequest = (options: Pick<SSG.Options, "etag">) => {
-        const serve = serveStaticGit({
-            repo: `${BASE}/repo/loose1/.git`,
-            root: `htdocs`,
-            etag: options.etag,
-        })
+    const serve = serveStaticGit({
+        repo: `${BASE}/repo/loose1/.git`,
+        root: `htdocs`,
+    })
+    const request = supertest(http.createServer((req, res) => serve(req, res, finalhandler(req, res))))
 
-        return supertest(http.createServer((req, res) => serve(req, res, finalhandler(req, res))))
-    }
-
-    it(`etag: false`, async () => {
-        const request = makeRequest({etag: false})
+    it(`content-type: text/html`, async () => {
         const res = await request.get(`/foo.html`)
         assert.strictEqual(res.status, 200)
         assert.match(res.text, /Foo/)
-        assert.equal(res.headers.etag, undefined, "should NOT have an eTag")
+        assert.match(res.headers["content-type"], /^text\/html/)
     })
 
-    it(`etag: true`, async () => {
-        const request = makeRequest({etag: true})
+    it(`content-type: text/css`, async () => {
         const res = await request.get(`/bar/bar.css`)
         assert.strictEqual(res.status, 200)
         assert.match(res.text, /Bar/)
         assert.match(res.headers["content-type"], /^text\/css/)
-        assert.match(res.headers.etag, /^W\/[0-9a-fA-F]{40,}$/)
     })
 
-    it(`etag: undefined`, async () => {
-        const request = makeRequest({})
+    it(`content-type: application/javascript`, async () => {
         const res = await request.get(`/bar/buz/buz.js`)
         assert.strictEqual(res.status, 200)
         assert.match(res.text, /Buz/)
         assert.match(res.headers["content-type"], /^application\/javascript/)
-        assert.match(res.headers.etag, /^W\/[0-9a-fA-F]{40,}$/)
     })
 })
