@@ -3,9 +3,9 @@ import {strict as assert} from "node:assert"
 import * as http from "node:http"
 import {describe, it} from "node:test"
 import {fileURLToPath} from "node:url"
+import type {SSG} from "serve-static-git"
 import supertest from "supertest"
 import {serveStaticGit} from "../lib/index.ts"
-import type {SSG} from "../types/serve-static-git.d.ts"
 
 const BASE = fileURLToPath(new URL(".", import.meta.url)).replace(/\/[^/]+\/?$/, "")
 const TITLE = fileURLToPath(import.meta.url).split("/").pop()!
