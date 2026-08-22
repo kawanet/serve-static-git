@@ -7,7 +7,7 @@ import type {SSG} from "serve-static-git"
 import supertest from "supertest"
 import {serveStaticGit} from "../lib/index.ts"
 
-const BASE = fileURLToPath(new URL(".", import.meta.url)).replace(/\/[^/]+\/?$/, "")
+const BASE = process.cwd()
 const TITLE = fileURLToPath(import.meta.url).split("/").pop()!
 
 describe(TITLE, () => {

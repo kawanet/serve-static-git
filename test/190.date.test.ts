@@ -7,7 +7,7 @@ import type {SSG} from "serve-static-git"
 import supertest from "supertest"
 import {serveStaticGit} from "../lib/index.ts"
 
-const BASE = fileURLToPath(new URL(".", import.meta.url)).replace(/\/[^/]+\/?$/, "")
+const BASE = process.cwd()
 const TITLE = fileURLToPath(import.meta.url).split("/").pop()!
 const VALID_DATE = /^\w{3}, \d{2} \w{3} \d{4} \d{2}:\d{2}:\d{2} GMT/
 
