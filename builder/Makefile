@@ -96,7 +96,7 @@ test-full: all smoke
 	cd .. && node_modules/.bin/tsc --noEmit
 	cd .. && node_modules/.bin/ts-refine format --check && node_modules/.bin/ts-refine imports --check
 	cd .. && rm -rf repo/ && bash test/test-prepare.sh
-	cd .. && node --test test/*.ts
+	cd .. && node --test test/*.test.ts
 
 clean:
 	/bin/rm -fr $(ALL)
