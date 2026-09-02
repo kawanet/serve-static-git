@@ -7,7 +7,7 @@
     "url": "https://github.com/kawanet/serve-static-git/issues"
   },
   "dependencies": {
-    "git-cat-file": "^0.5.2",
+    "git-cat-file": "^0.6.0",
     "mime": "^3.0.0"
   },
   "devDependencies": {
@@ -39,7 +39,7 @@
     }
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=18.8.0"
   },
   "exports": {
     ".": {
@@ -74,7 +74,6 @@
     "prepack": "make -C builder is-buildable",
     "prepare": "make -C builder is-not-buildable 2> /dev/null || make -C builder clean all test",
     "test": "make -C builder test",
-    "test-bundled": "bash test/test-prepare.sh && node --test builder/tests/bundled.js",
     "ts-refine": "./node_modules/.bin/ts-refine format && ./node_modules/.bin/ts-refine imports"
   },
   "sideEffects": false,
