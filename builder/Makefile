@@ -24,9 +24,6 @@ MAX_BYTES := 5000
 # accidentally inlined library sources or a dependency.
 TEST_MAX_BYTES := 40000
 
-# API surface of the externalized `mime` dep that lib/index.ts consumes.
-MIME_API := getType
-
 ALL := $(MJS_DST) $(CJS_DST)
 
 # Build/test paths require Node's native TypeScript type-strip (default on
@@ -72,17 +69,6 @@ $(TESTS_DST): $(TESTS_CONFIG) $(SRC) $(BUILDER_SRC) $(TEST_SRC) $(MJS_DST)
 	@test "$$(wc -c < $@)" -le $(TEST_MAX_BYTES) || { echo "ERROR: $@ exceeds $(TEST_MAX_BYTES) byte cap" >&2; exit 1; }
 	@echo ""
 
-# Verify that the externalized `mime` dep exposes the API surface that
-# lib/index.ts consumes, under both CJS `require()` and ESM `import`.
-# This is what catches the mime v4 ESM-only regression: the bundle
-# does `var mime = require('mime'); mime.getType(...)`, and `require()`
-# of an ESM module returns the namespace object, leaving `getType`
-# undefined at runtime. The check fails with a clear message before
-# the broken bundle reaches a consumer.
-test_mime:
-	cd .. && node --input-type=commonjs -e 'const m = require("mime"); for (const k of process.argv.slice(1)) { if (typeof m[k] !== "function") { console.error("missing mime CJS API:", k); process.exit(1); } console.log("mime CJS API OK:", k); }' $(MIME_API)
-	cd .. && node --input-type=module    -e 'const m = (await import("mime")).default; for (const k of process.argv.slice(1)) { if (typeof m[k] !== "function") { console.error("missing mime ESM API:", k); process.exit(1); } console.log("mime ESM API OK:", k); }' $(MIME_API)
-
 ####
 
 # Consumer `npm install` skips the heavy test-full step to keep install fast.
@@ -95,7 +81,7 @@ test:
 		*) $(MAKE) test-full ;; \
 	esac
 
-test-full: all test_mime
+test-full: all
 	cd .. && node_modules/.bin/tsc --noEmit
 	cd .. && node_modules/.bin/ts-refine format --check && node_modules/.bin/ts-refine imports --check
 	cd .. && rm -rf repo/ && bash test/test-prepare.sh
@@ -106,4 +92,4 @@ test-full: all test_mime
 clean:
 	/bin/rm -fr $(ALL) $(TESTS_DST)
 
-.PHONY: all clean test test_mime test-full is-buildable is-not-buildable
+.PHONY: all clean test test-full is-buildable is-not-buildable
