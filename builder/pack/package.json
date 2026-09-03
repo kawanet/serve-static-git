@@ -1,5 +1,5 @@
 {
-  "dependencies": {
+  "devDependencies": {
     "express-intercept": "^1.3.3",
     "express4": "npm:express@^4",
     "express5": "npm:express@^5",
